@@ -1,0 +1,33 @@
+
+server:
+  port: 8763
+  address:  127.0.0.1 #10.50.1.47 #172.81.236.91
+
+node:
+  other-node-port: 8764
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: tech-support
+    password: ts123456
+eureka:
+  instance:
+    #如不想使用主机名来定义注册中心的地址，也可以使用Ip地址的形式，如下为 true即可
+    prefer-ip-address: true
+    hostname: node2
+  server:
+    #驱逐已下线服务:5秒
+    eviction-interval-timer-in-ms: 5000
+  client:
+    #当前应用为注册中心，不向注册中心注册自己为服务故设为false
+    register-with-eureka: false
+    #注册中心的职责是维护服务实例，不需要去检索服务，故设为false
+    fetch-registry: false
+    #当前注册服务中心注册到另一注册中心，实现服务高可用
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@node1:${node.other-node-port}/eureka/
+spring:
+  application:
+    name: RegisterNode2
